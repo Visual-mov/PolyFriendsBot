@@ -1,4 +1,3 @@
-Absolute Zero
 Acid green
 Aero
 Aero blue
@@ -88,7 +87,7 @@ Bright maroon
 Bright navy blue
 Bright pink
 Bright turquoise
-Bright yellow (Crayola)
+Bright yellow
 Brilliant rose
 Brink pink
 British racing green
@@ -139,21 +138,20 @@ Cerise
 Cerulean
 Cerulean blue
 Cerulean frost
-Cerulean (Crayola)
+Cerulean
 Champagne
 Champagne pink
 Charcoal
 Charleston green
 Charm pink
-Chartreuse (traditional)
+Chartreuse
 Cherry blossom pink
 Chestnut
 China pink
 China rose
 Chinese red
 Chinese violet
-Chocolate (traditional)
-Chocolate (web)
+Chocolate
 Cinereous
 Cinnamon Satin
 Citrine
@@ -175,8 +173,7 @@ Coral
 Coral pink
 Cordovan
 Cornell red
-Cornflower blue (web)
-Cornflower blue (Crayola)
+Cornflower blue
 Cornsilk
 Cosmic cobalt
 Cosmic latte
@@ -184,7 +181,6 @@ Coyote brown
 Cotton candy
 Cream
 Crimson
-Crimson (UA)
 Cultured
 Cyan
 Cyber grape
@@ -197,9 +193,9 @@ Dark byzantium
 Dark cyan
 Dark electric blue
 Dark goldenrod
-Dark gray (X11)
+Dark gray
 Dark green
-Dark green (X11)
+Dark green
 Dark jungle green
 Dark khaki
 Dark lava
@@ -286,9 +282,7 @@ Flame
 Flax
 Floral white
 Fluorescent blue
-Forest green (Crayola)
-Forest green (traditional)
-Forest green (web)
+Forest green
 French beige
 French bistre
 French blue
@@ -315,8 +309,6 @@ Glaucous
 Glossy grape
 Gold
 Gold (metallic)
-Gold (web) (Golden)
-Gold (Crayola)
 Gold Fusion
 Golden brown
 Golden poppy
@@ -324,16 +316,8 @@ Golden yellow
 Goldenrod
 Granite gray
 Granny Smith apple
-Gray (web)
-Gray (X11)
+Gray
 Green
-Green (Crayola)
-Green (HTML/CSS color)
-Green (Munsell)
-Green (NCS)
-Green (Pantone)
-Green (pigment)
-Green (RYB)
 Green-blue
 Green-cyan
 Green Lizard
@@ -507,7 +491,6 @@ Maximum red
 Maximum Red Purple
 Maximum violet
 Maximum yellow
-Maximum yellow red
 May green
 Maya blue
 Meat brown
@@ -542,7 +525,6 @@ Medium violet-red
 Medium yellow
 Mellow apricot
 Mellow yellow
-Melon
 Metallic blue
 Metallic bronze
 Metallic brown
@@ -568,10 +550,8 @@ Middle red
 Middle red purple
 Middle yellow
 Middle yellow red
-Midnight
 Midnight blue
-Midnight blue
-Midnight green (eagle green)
+Midnight green
 Mikado yellow
 Milk
 Milk chocolate

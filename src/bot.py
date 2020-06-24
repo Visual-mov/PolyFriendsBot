@@ -26,25 +26,29 @@ def main(argv):
     generator = PolyFriendGenerator((1000,1000), 5, open(NAMES,"r"), FONT, "img.png", SEED)
     generator.generate_image()
     generator.save_image()
-    
+
+    time = datetime.now()
+    status = generate_status(generator.name, time)
+    print(status)
     if tweet:
         keys = list(getkeys())
         auth = tweepy.OAuthHandler(keys[0],keys[1])
         auth.set_access_token(keys[2],keys[3])
         api = tweepy.API(auth)
-        time = datetime.now()
         try:
-            api.update_with_media(IMAGE_PATH, generate_status(generator.name, time))
+            api.update_with_media(IMAGE_PATH, status)
             print("Tweeted image.")
         except tweepy.TweepError as e:
             print(f"Tweepy error:\n{e.reason}")
 
 def generate_status(name, time):
-    hobby = choice([s.replace('\n','').lower() for s in open(HOBBIES,"r").readlines()])
-    color = choice([s.replace('\n','').lower() for s in open(COLORS,"r").readlines()])
+    hobby, color = rand_text(HOBBIES), rand_text(COLORS)
     minutes = time.minute if len(str(time.minute)) != 1 else "0" + str(time.minute)
     return f"This is {name}, and they like {hobby}!\nTheir favorite color is {color}.\nCreated on {time.month}/{time.day}/{time.year} at {time.hour}:{minutes} {tzname[0]}"
 
+def rand_text(file):
+    return choice([s.replace('\n','').lower() for s in open(file,"r").readlines()])
+    
 def getkeys():
     try:
         lines = open(KEYS_PATH,'r').readlines()

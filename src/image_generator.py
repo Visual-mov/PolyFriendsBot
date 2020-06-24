@@ -1,37 +1,36 @@
-import random as rnd
+from random import randint, choice, seed
 from math import *
 from PIL import Image, ImageDraw, ImageFont
 
 class PolyFriendGenerator:
     def __init__(self, size, width, names, font_name, save_name, seed=""):
         if seed != "":
-            rnd.seed(seed)
+            seed(seed)
         self.image = Image.new("HSV",size,self.rand_pastel())
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype(font_name, 75)
-        self.name = rnd.choice([s.replace('\n','') for s in names.readlines()])
+        self.name = choice([s.replace('\n','') for s in names.readlines()])
         self.pixels = self.image.load()
         self.size = size
         self.width = width
-
         self.c = (size[0]/2, size[1]/2)
 
         # Sizes and lengths are ratios of the image dimensions to preserve the same look.
         x, y = size[0], size[1]
-        self.b_size = rnd.randint(int(x/17), int(y/9))
-        self.h_size = rnd.randint(int(x/10), int(size[1]/5.5))
+        self.b_size = randint(int(x/17), int(y/9))
+        self.h_size = randint(int(x/10), int(size[1]/5.5))
 
-        self.b_length = rnd.randint(int(-y/18),int(y/10))
-        self.leg_length = rnd.randint(int(y/14),int(y/10))
+        self.b_length = randint(int(-y/18),int(y/10))
+        self.leg_length = randint(int(y/14),int(y/10))
         self.arm_length = self.leg_length
-        self.feet_length = rnd.randint(15,40)
+        self.feet_length = randint(15,40)
 
-        self.arm_angles = (rnd.randint(-60, 75), rnd.randint(-60, 75))
+        self.arm_angles = (randint(-60, 75), randint(-60, 75))
         self.eye_angles = [(-90, 90), (90, -90)]
         self.finger_angles = [0,50,-50]
-        self.leg_angle = rnd.randint(75,90)
+        self.leg_angle = randint(75,90)
         
-        self.stroke = (rnd.randint(0,255),255,90)
+        self.stroke = (randint(0,255),255,90)
         self.arm_y = int(self.c[1]+size[1]/18)
         self.border_width = 40
 
@@ -71,8 +70,8 @@ class PolyFriendGenerator:
             lambda x,y: [[(x-h/10,y+h/15),(x+h/10,y-h/20)],[(x-h/10,y-h/20),(x+h/10,y+h/15)]],
             lambda x,y: [[(x-h/10,y),(x+h/10,y)],[(x-h/10,y),(x+h/10,y)]]
         ]
-        self.h_points = rnd.choice(self.head_shapes)(self.c[0], self.c[1]-h)
-        self.b_points = rnd.choice(self.body_shapes)(self.c[0], self.c[1], 100)
+        self.h_points = choice(self.head_shapes)(self.c[0], self.c[1]-h)
+        self.b_points = choice(self.body_shapes)(self.c[0], self.c[1], 100)
 
     def save_image(self):
         self.image = self.image.convert(mode="RGB")
@@ -103,16 +102,15 @@ class PolyFriendGenerator:
 
         self.ellipse(left, eye_r)
         self.ellipse(right, eye_r)
-        
-        left_angles = rnd.choice(self.eye_angles)
-        right_angles = rnd.choice(self.eye_angles)
-        self.draw.chord(self.ellipse_bound(left, eye_r-5), left_angles[0], left_angles[1], (0,0,0))
-        self.draw.chord(self.ellipse_bound(right, eye_r-5), right_angles[0], right_angles[1], (0,0,0))
+
+        l_angles, r_angles = choice(self.eye_angles), choice(self.eye_angles)
+        self.draw.chord(self.bound(left, eye_r-5), l_angles[0], l_angles[1], (0,0,0))
+        self.draw.chord(self.bound(right, eye_r-5), r_angles[0], r_angles[1], (0,0,0))
 
         self.draw_eyebrows(left, right)
 
     def draw_eyebrows(self, left, right):
-        eyebrows = rnd.choice(self.eyebrows)
+        eyebrows = choice(self.eyebrows)
         self.draw.line(eyebrows(left[0],left[1]-self.h_size/3.5)[0],self.stroke, self.width)
         self.draw.line(eyebrows(right[0],right[1]-self.h_size/3.5)[1],self.stroke, self.width)
 
@@ -136,7 +134,6 @@ class PolyFriendGenerator:
         self.draw.line([l_leg[1], self.limb_point(l_leg[1],self.leg_angle-90,self.feet_length,False)], self.stroke, self.width)
         self.draw.line([r_leg[1], self.limb_point(r_leg[1],self.leg_angle-90,self.feet_length,True)], self.stroke, self.width)
 
-
     def arm_points(self, range, angle, length, arm_y, right):
         for x in range:
             if self.pixels[x, arm_y] == self.stroke:
@@ -156,9 +153,9 @@ class PolyFriendGenerator:
     
     # Helper functions
     def ellipse(self, c, r):
-        self.draw.ellipse(self.ellipse_bound(c, r), (0,0,255), self.stroke, self.width-2)
+        self.draw.ellipse(self.bound(c, r), (0,0,255), self.stroke, self.width-2)
 
-    def ellipse_bound(self, c, r):
+    def bound(self, c, r):
         return [(c[0] - r, c[1] - r), (c[0] + r, c[1] + r)]
 
     def polygon(self, points, fill, width):
@@ -171,4 +168,4 @@ class PolyFriendGenerator:
         return (int(dis*x)+p[0] if right else -int(dis*x)+p[0], int(dis*y)+p[1])
 
     def rand_pastel(self):
-        return (rnd.randint(0,255),80,255)
+        return (randint(0,255),80,255)
