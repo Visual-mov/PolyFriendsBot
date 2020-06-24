@@ -3,16 +3,16 @@ from math import *
 from PIL import Image, ImageDraw, ImageFont
 
 class PolyFriendGenerator:
-    def __init__(self, size, width, names, font_name, save_name, seed=""):
-        if seed != "":
-            seed(seed)
+    def __init__(self, size, width, name, font_name, save_name, s=""):
+        if s != "": seed(s)
         self.image = Image.new("HSV",size,self.rand_pastel())
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype(font_name, 75)
-        self.name = choice([s.replace('\n','') for s in names.readlines()])
+        self.name = name
         self.pixels = self.image.load()
         self.size = size
         self.width = width
+        self.save_name = save_name
         self.c = (size[0]/2, size[1]/2)
 
         # Sizes and lengths are ratios of the image dimensions to preserve the same look.
@@ -78,7 +78,7 @@ class PolyFriendGenerator:
 
     def save_image(self):
         self.image = self.image.convert(mode="RGB")
-        self.image.save("img.png", "PNG")
+        self.image.save(self.save_name, "PNG")
     
     def generate_image(self):   
         self.draw_head()
