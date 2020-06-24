@@ -3,24 +3,27 @@ from math import *
 from PIL import Image, ImageDraw, ImageFont
 
 class PolyFriendGenerator:
-    def __init__(self, size, width, names, font_name, seed=""):
+    def __init__(self, size, width, names, font_name, save_name, seed=""):
         if seed != "":
             rnd.seed(seed)
         self.image = Image.new("HSV",size,self.rand_pastel())
         self.draw = ImageDraw.Draw(self.image)
-        self.font = ImageFont.truetype(font_name, 80)
+        self.font = ImageFont.truetype(font_name, 75)
         self.name = rnd.choice([s.replace('\n','') for s in names.readlines()])
         self.pixels = self.image.load()
         self.size = size
         self.width = width
 
         self.c = (size[0]/2, size[1]/2)
-        self.b_size = rnd.randint(55, 120)
-        self.h_size = rnd.randint(100, 180)
 
-        self.b_length = rnd.randint(-50,100)
-        self.arm_length = rnd.randint(75,150)
-        self.leg_length = rnd.randint(75,150)
+        # Sizes and lengths are ratios of the image dimensions to preserve the same look.
+        x, y = size[0], size[1]
+        self.b_size = rnd.randint(int(x/17), int(y/9))
+        self.h_size = rnd.randint(int(x/10), int(size[1]/5.5))
+
+        self.b_length = rnd.randint(int(-y/18),int(y/10))
+        self.leg_length = rnd.randint(int(y/14),int(y/10))
+        self.arm_length = self.leg_length
         self.feet_length = rnd.randint(15,40)
 
         self.arm_angles = (rnd.randint(-60, 75), rnd.randint(-60, 75))
@@ -29,7 +32,7 @@ class PolyFriendGenerator:
         self.leg_angle = rnd.randint(75,90)
         
         self.stroke = (rnd.randint(0,255),255,90)
-        self.arm_y = 550
+        self.arm_y = int(self.c[1]+size[1]/18)
         self.border_width = 40
 
         c1, c2 = cos(2*pi/5), -cos(pi/5)

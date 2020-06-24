@@ -6,7 +6,7 @@ The characters are generated from pre-defined body & head shapes. However the si
 
 ## Example Images
 <p>
-    <img src="examples/Image1.png" width="300"/>
-    <img src="examples/Image2.png" width="300"/>
-    <img src="examples/Image3.png" width="300"/>
+    <img src="examples/Image1.png" width="250"/>
+    <img src="examples/Image2.png" width="250"/>
+    <img src="examples/Image3.png" width="250"/>
 </p>
