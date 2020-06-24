@@ -15,8 +15,8 @@ class PolyFriendGenerator:
         self.width = width
 
         self.c = (size[0]/2, size[1]/2)
-        self.b_size = rnd.randint(60, 120)
-        self.h_size = rnd.randint(110, 180)
+        self.b_size = rnd.randint(55, 120)
+        self.h_size = rnd.randint(100, 180)
 
         self.b_length = rnd.randint(-50,100)
         self.arm_length = rnd.randint(75,150)
@@ -28,7 +28,7 @@ class PolyFriendGenerator:
         self.finger_angles = [0,50,-50]
         self.leg_angle = rnd.randint(75,90)
         
-        self.stroke = (rnd.randint(0,255),255,80)
+        self.stroke = (rnd.randint(0,255),255,90)
         self.arm_y = 550
         self.border_width = 40
 
@@ -36,10 +36,13 @@ class PolyFriendGenerator:
         s1, s2 = sin(2*pi/5), sin(4*pi/5)
         h, b = self.h_size, self.b_size
         self.head_shapes = [
-            # Square
+            # Squares
             lambda x,y: [(x-h,y-h), (x+h,y-h), (x+h,y+h), (x-h,y+h)],
+            lambda x,y: [(x,y-h), (x+h,y), (x,y+h), (x-h,y)],
             # Triangle
             lambda x,y: [(x,y-h), (x-h,y+h), (x+h,y+h)],
+            # Upside down Triangle
+            lambda x,y: [(x,y+h), (x-h*1.5,y-h), (x+h*1.5,y-h)],
             # Trapezoid
             lambda x,y: [(x-h/1.5,y-h/1.5), (x+h/1.5,y-h/1.5), (x+h,y+h), (x-h,y+h)],
             # Upside down Pentagon
@@ -57,7 +60,7 @@ class PolyFriendGenerator:
             # Kite
             lambda x,y,l: [(x-b/4,y), (x+b/4,y), (x+b/2,y+b*1.5+l), (x,y+b*2+l), (x-b/2,y+b*1.5+l)],
             # Diamond
-            lambda x,y,l: [(x,y+b*1.5+l), (x+b*s1,y+b*c1), (x+b*s2,y), (x-b*s2,y), (x-b*s1,y+b*c1)]
+            lambda x,y,l: [(x,y+b*2+l), (x+b*s1,y+b*c1), (x+b*s2,y), (x-b*s2,y), (x-b*s1,y+b*c1)]
         ]
         self.eyebrows = [
             lambda x,y: [[],[]],
@@ -76,6 +79,7 @@ class PolyFriendGenerator:
         self.draw_head()
         self.draw_body()
         self.draw_border()
+
         self.draw.text((self.border_width,self.border_width), self.name, self.stroke, self.font)
 
     # Draw functions
@@ -110,8 +114,6 @@ class PolyFriendGenerator:
         self.draw.line(eyebrows(right[0],right[1]-self.h_size/3.5)[1],self.stroke, self.width)
 
     def draw_limbs(self):
-        pixels = self.image.load()
-
         # Arms
         l_arm = self.arm_points(range(self.size[0]-1), self.arm_angles[0], self.arm_length, self.arm_y, False)
         r_arm = self.arm_points(reversed(range(self.size[0]-1)), self.arm_angles[1], self.arm_length, self.arm_y, True)
