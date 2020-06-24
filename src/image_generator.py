@@ -32,6 +32,8 @@ class PolyFriendGenerator:
         
         self.stroke = (randint(0,255),255,90)
         self.arm_y = int(self.c[1]+size[1]/18)
+        self.leg_x = self.b_size/8
+        self.eye_circle = bool(randint(0,3))
         self.border_width = 40
 
         c1, c2 = cos(2*pi/5), -cos(pi/5)
@@ -81,7 +83,6 @@ class PolyFriendGenerator:
         self.draw_head()
         self.draw_body()
         self.draw_border()
-
         self.draw.text((self.border_width,self.border_width), self.name, self.stroke, self.font)
 
     # Draw functions
@@ -100,8 +101,12 @@ class PolyFriendGenerator:
         left = (loc[0] - self.h_size/5, loc[1])
         right = (loc[0] + self.h_size/5, loc[1])
 
-        self.ellipse(left, eye_r)
-        self.ellipse(right, eye_r)
+        if self.eye_circle:
+            self.ellipse(left, eye_r)
+            self.ellipse(right, eye_r)
+        else:
+            self.draw.rectangle(self.bound(left, eye_r), (0,0,255), self.stroke, self.width-2)
+            self.draw.rectangle(self.bound(right, eye_r), (0,0,255), self.stroke, self.width-2)
 
         l_angles, r_angles = choice(self.eye_angles), choice(self.eye_angles)
         self.draw.chord(self.bound(left, eye_r-5), l_angles[0], l_angles[1], (0,0,0))
@@ -115,34 +120,18 @@ class PolyFriendGenerator:
         self.draw.line(eyebrows(right[0],right[1]-self.h_size/3.5)[1],self.stroke, self.width)
 
     def draw_limbs(self):
-        # Arms
-        l_arm = self.arm_points(range(self.size[0]-1), self.arm_angles[0], self.arm_length, self.arm_y, False)
-        r_arm = self.arm_points(reversed(range(self.size[0]-1)), self.arm_angles[1], self.arm_length, self.arm_y, True)
-        self.draw.line(l_arm,self.stroke, self.width)
-        self.draw.line(r_arm,self.stroke, self.width)
+        # Arms & fingers
+        for i in range(0,2):
+            arm = self.arm_points(self.arm_angles[i], self.arm_length, self.arm_y, bool(i))
+            self.draw.line(arm, self.stroke, self.width)
+            for j in range(0,3):
+                self.draw.line([arm[1], self.limb_point(arm[1], self.arm_angles[i]+self.finger_angles[j], 15, bool(i))], self.stroke, self.width-1)
 
-        # Fingers
-        for i in range(0,3):
-            self.draw.line([l_arm[1],self.limb_point(l_arm[1],self.arm_angles[0]+self.finger_angles[i],15,False)], self.stroke, self.width-1)
-            self.draw.line([r_arm[1],self.limb_point(r_arm[1],self.arm_angles[1]+self.finger_angles[i],15,True)], self.stroke, self.width-1)
-
-        # Legs
-        l_leg = self.leg_points(self.leg_angle, self.leg_length, self.c[0]-self.b_size/8, False)
-        r_leg = self.leg_points(self.leg_angle, self.leg_length, self.c[0]+self.b_size/8, True)
-        self.draw.line(l_leg, self.stroke, self.width)
-        self.draw.line(r_leg, self.stroke, self.width)
-        self.draw.line([l_leg[1], self.limb_point(l_leg[1],self.leg_angle-90,self.feet_length,False)], self.stroke, self.width)
-        self.draw.line([r_leg[1], self.limb_point(r_leg[1],self.leg_angle-90,self.feet_length,True)], self.stroke, self.width)
-
-    def arm_points(self, range, angle, length, arm_y, right):
-        for x in range:
-            if self.pixels[x, arm_y] == self.stroke:
-                return [(x, arm_y), self.limb_point((x, arm_y), angle, length, right)]
-
-    def leg_points(self, angle, length, leg_x, right):
-        for y in reversed(range(self.size[1]-1)):
-            if self.pixels[leg_x, y] == self.stroke:
-                return [(leg_x, y), self.limb_point((leg_x, y), angle, length, right)]
+        # Legs & feet
+        for i in range(0,2):
+            leg = self.leg_points(self.leg_angle, self.leg_length, bool(i))
+            self.draw.line(leg, self.stroke, self.width)
+            self.draw.line([leg[1], self.limb_point(leg[1], self.leg_angle-90, self.feet_length,bool(i))], self.stroke, self.width)
 
     def draw_border(self):
         self.draw.line([(0,0), (self.size[0],0)], self.stroke, self.border_width)
@@ -152,6 +141,18 @@ class PolyFriendGenerator:
 
     
     # Helper functions
+    def arm_points(self, angle, length, arm_y, right):
+        r = range(self.size[0]-1)
+        for x in reversed(r) if right else r:
+            if self.pixels[x, arm_y] == self.stroke:
+                return [(x, arm_y), self.limb_point((x, arm_y), angle, length, right)]
+
+    def leg_points(self, angle, length, right):
+        x = self.c[0] + (self.leg_x if right else -self.leg_x)
+        for y in reversed(range(self.size[1]-1)):
+            if self.pixels[x, y] == self.stroke:
+                return [(x, y), self.limb_point((x, y), angle, length, right)]
+
     def ellipse(self, c, r):
         self.draw.ellipse(self.bound(c, r), (0,0,255), self.stroke, self.width-2)
 
@@ -164,8 +165,8 @@ class PolyFriendGenerator:
             self.draw.line([points[i],points[i+1]],fill,width)
 
     def limb_point(self, p, deg, dis, right):
-        x, y = cos(radians(deg)), sin(radians(deg))
-        return (int(dis*x)+p[0] if right else -int(dis*x)+p[0], int(dis*y)+p[1])
+        x, y = int(dis*cos(radians(deg))), int(dis*sin(radians(deg)))+p[1]
+        return (x+p[0] if right else -x+p[0], y)
 
     def rand_pastel(self):
         return (randint(0,255),80,255)

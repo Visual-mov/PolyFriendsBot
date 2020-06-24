@@ -5,6 +5,7 @@ from datetime import datetime
 from image_generator import PolyFriendGenerator
 
 # The PolyFriends Bot
+# Find the bot at https://twitter.com/PolyFriendsBot!
 # Created by Ryan Danver 2020
 
 # Files
