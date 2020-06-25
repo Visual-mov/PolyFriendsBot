@@ -17,8 +17,8 @@ class PolyFriendGenerator:
 
         # Sizes and lengths are ratios of the image dimensions to preserve the same look.
         x, y = size[0], size[1]
-        self.b_size = randint(int(x/17), int(y/9))
-        self.h_size = randint(int(x/10), int(y/5.5))
+        self.b_size = randint(int(y/17), int(y/9))
+        self.h_size = randint(int(y/10), int(y/5.5))
 
         self.b_length = randint(int(-y/18),int(y/10))
         self.leg_length = randint(int(y/14),int(y/10))
@@ -32,7 +32,7 @@ class PolyFriendGenerator:
         
         self.arm_yoff = int(self.c[1]+size[1]/18)
         self.leg_xoff = self.b_size/8
-        self.eye_xoff = self.h_size/5
+        self.eye_xoff = self.h_size/4.5
         self.eye_circle = bool(randint(0,3))
         self.stroke = (randint(0,255),255,90)
         self.border_width = 40
@@ -44,28 +44,27 @@ class PolyFriendGenerator:
             # Squares
             lambda x,y: [(x-h,y-h), (x+h,y-h), (x+h,y+h), (x-h,y+h)],
             lambda x,y: [(x,y-h), (x+h,y), (x,y+h), (x-h,y)],
-            # Triangle
+            # Pentagons
+            lambda x,y: [(x,y+h), (x+h*s1,y+h*c1), (x+h*s2,y+h*c2), (x-h*s2,y+h*c2), (x-h*s1,y+h*c1)],
+            lambda x,y: [(x,y-h), (x+h*s1,y-h*c1), (x+h*s2*1.5,y+h), (x-h*s2*1.5,y+h), (x-h*s1,y-h*c1)],
+            # Triangles
             lambda x,y: [(x,y-h), (x-h,y+h), (x+h,y+h)],
-            # Upside down Triangle
             lambda x,y: [(x,y+h), (x-h*1.5,y-h), (x+h*1.5,y-h)],
             # Trapezoid
             lambda x,y: [(x-h/1.5,y-h/1.5), (x+h/1.5,y-h/1.5), (x+h,y+h), (x-h,y+h)],
-            # Upside down Pentagon
-            lambda x,y: [(x,y+h), (x+h*s1,y+h*c1), (x+h*s2,y+h*c2), (x-h*s2,y+h*c2), (x-h*s1,y+h*c1)],
             # Rhombus
             lambda x,y: [(x,y-h), (x+h*1.5,y), (x,y+h), (x-h*1.5,y)],
         ]
         self.body_shapes = [
-            # Trapezoid
+            # Trapezoids
             lambda x,y,l: [(x-b/4,y), (x+b/4,y), (x+b,y+b*2+l), (x-b,y+b*2+l)],
-            # Upside down trapezoid
             lambda x,y,l: [(x-b/1.5,y), (x+b/1.5,y), (x+b/4,y+b*2+l), (x-b/4,y+b*2+l)],
             # Square
             lambda x,y,l: [(x-b/2,y), (x+b/2,y), (x+b/2,y+b*2+l), (x-b/2,y+b*2+l)],
             # Kite
             lambda x,y,l: [(x-b/4,y), (x+b/4,y), (x+b/2,y+b*1.5+l), (x,y+b*2+l), (x-b/2,y+b*1.5+l)],
             # Diamond
-            lambda x,y,l: [(x,y+b*2+l), (x+b*s1,y+b*c1), (x+b*s2,y), (x-b*s2,y), (x-b*s1,y+b*c1)]
+            lambda x,y,l: [(x,y+b*2+l), (x+b*s1,y+b*c1), (x+b*s2,y), (x-b*s2,y), (x-b*s1,y+b*c1)],
         ]
         self.eyebrows = [
             lambda x,y: [[],[]],
@@ -111,7 +110,7 @@ class PolyFriendGenerator:
 
             # Puplis
             angles = choice(self.eye_angles)
-            self.draw.chord(self.bound(eye_pos, eye_r-5), angles[0], angles[1], (0,0,0))
+            self.draw.chord(self.bound(eye_pos, eye_r-6), angles[0], angles[1], (0,0,0))
 
             # Eyebrows
             self.draw.line(eyebrows(eye_pos[0],eye_pos[1]-self.h_size/3.5)[i],self.stroke, self.width)
@@ -122,7 +121,7 @@ class PolyFriendGenerator:
             arm = self.arm_points(self.arm_angles[i], self.arm_length, bool(i))
             self.draw.line(arm, self.stroke, self.width)
             for j in range(0,3):
-                self.draw.line([arm[1], self.limb_point(arm[1], self.arm_angles[i]+self.finger_angles[j], 15, bool(i))], self.stroke, self.width-1)
+                self.draw.line([arm[1], self.limb_point(arm[1], self.arm_angles[i]+self.finger_angles[j], 18, bool(i))], self.stroke, self.width-1)
 
         # Legs & feet
         for i in range(2):
@@ -166,4 +165,4 @@ class PolyFriendGenerator:
         return (x+p[0] if right else -x+p[0], y)
 
     def rand_pastel(self):
-        return (randint(0,255),80,255)
+        return (randint(0,255),75,255)

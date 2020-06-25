@@ -28,9 +28,9 @@ def main(argv):
             save_date = True
 
     time = datetime.now()
-    file = get_filename(time) if save_date else "img.png"
+    file = real_path(get_filename(time) if save_date else "img.png")
 
-    generator = PolyFriendGenerator((1000,1000), 5, rand_text(NAMES), real_path(FONT), real_path(file), SEED)
+    generator = PolyFriendGenerator((1000,1000), 5, rand_text(NAMES), real_path(FONT), file, SEED)
     generator.generate_image()
     generator.save_image()
 
