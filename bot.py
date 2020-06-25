@@ -48,13 +48,14 @@ def main(argv):
             print(f"Tweepy error:\n{e.reason}")
 
 def generate_status(name, time):
-    hobby, color = rand_text(HOBBIES), rand_text(COLORS)
+    hobby, color = rand_text(HOBBIES, True), rand_text(COLORS)
     minutes = time.minute if len(str(time.minute)) != 1 else "0" + str(time.minute)
-    return f"This is {name}, and they like {hobby}!\nTheir favorite color is {color}.\nCreated on {time.month}/{time.day}/{time.year} at {time.hour}:{minutes} {tzname[0]}"
+    return f"This is {name}, and they like {hobby}!\nTheir favorite color is \"{color}\"\nCreated on {time.month}/{time.day}/{time.year} at {time.hour}:{minutes} {tzname[0]}"
 
-def rand_text(file):
+def rand_text(file, lower=False):
     try:
-        return choice([s.replace('\n','') for s in open(real_path(file),"r").readlines()])
+        text = choice([s.replace('\n','') for s in open(real_path(file),"r").readlines()])
+        return text.lower() if lower else text
     except FileNotFoundError:
         print(f"Could not find {file}")
         exit()
