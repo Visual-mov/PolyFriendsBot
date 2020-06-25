@@ -11,10 +11,10 @@ from image_generator import PolyFriendGenerator
 # Files
 KEYS_PATH = "keys.txt"
 
-NAMES = "text/names.txt"
-HOBBIES = "text/hobbies.txt"
-COLORS = "text/colors.txt"
-FONT = "PixelSplitter-Bold.ttf"
+NAMES = "resources/names.txt"
+HOBBIES = "resources/hobbies.txt"
+COLORS = "resources/colors.txt"
+FONT = "resources/PixelSplitter-Bold.ttf"
 
 SEED = ""
 
