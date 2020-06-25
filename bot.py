@@ -54,7 +54,7 @@ def generate_status(name, time):
 
 def rand_text(file):
     try:
-        return choice([s.replace('\n','').lower() for s in open(real_path(file),"r").readlines()])
+        return choice([s.replace('\n','') for s in open(real_path(file),"r").readlines()])
     except FileNotFoundError:
         print(f"Could not find {file}")
         exit()
