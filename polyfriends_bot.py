@@ -1,11 +1,14 @@
 import tweepy, sys, os
-from random import choice
-from time import tzname
 from datetime import datetime
+from time import tzname
+from math import *
+from random import randint, choice, seed
+from PIL import Image, ImageDraw, ImageFont
+
 
 # The PolyFriends Bot
-# Find the bot at https://twitter.com/PolyFriendsBot!
-# Created by Ryan Danver 2020
+#    Find the bot at https://twitter.com/PolyFriendsBot!
+#    Created by Ryan Danver 2020
 
 # Files
 KEYS_PATH = "keys.txt"
@@ -15,6 +18,7 @@ HOBBIES = "resources/hobbies.txt"
 COLORS = "resources/colors.txt"
 FONT = "resources/PixelSplitter-Bold.ttf"
 
+# Custom seed for RNG
 SEED = ""
 
 def main(argv):
@@ -29,7 +33,10 @@ def main(argv):
     time = datetime.now()
     file = real_path(get_filename(time) if save_date else "img.png")
 
-    generator = PolyFriendGenerator((1000,1000), 5, rand_text(NAMES), real_path(FONT), file, SEED)
+    if SEED != "":
+        seed(SEED)
+
+    generator = PolyFriendGenerator((1000,1000), 5, rand_text(NAMES), real_path(FONT), file)
     generator.generate_image()
     generator.save_image()
 
@@ -74,13 +81,9 @@ def real_path(file):
 def get_filename(time):
     return f"img_{time.month}{time.day}{time.year}{time.hour}{time.minute}{time.second}.png"
 
-from random import randint, choice, seed
-from math import *
-from PIL import Image, ImageDraw, ImageFont
 
 class PolyFriendGenerator:
-    def __init__(self, size, width, name, font_name, save_name, s=""):
-        if s != "": seed(s)
+    def __init__(self, size, width, name, font_name, save_name):
         self.image = Image.new("HSV",size,self.rand_pastel())
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype(font_name, 75)

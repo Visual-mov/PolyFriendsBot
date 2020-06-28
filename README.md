@@ -5,7 +5,7 @@
 The characters are generated from pre-defined body & head shapes, however the size of the head and length of the body are randomized. The arm angles & lengths, leg angles & lengths, eye position, eye shape, eyebrows, and fill colors are also random as well.
 
 ## Running
-Usage: `python3 bot.py [--tweet] [--date_stamp]`
+Usage: `python3 polyfriends_bot.py [--tweet] [--date_stamp]`
 * `--tweet` : Tweets the created image (Keys and access tokens must be located in `keys.txt`)
 * `--date_stamp` : Saves the image with a unique date & time stamp for the file name.
 
