@@ -12,7 +12,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 # Files
 KEYS_PATH = "keys.txt"
-
 NAMES = "resources/names.txt"
 HOBBIES = "resources/hobbies.txt"
 COLORS = "resources/colors.txt"
@@ -20,6 +19,7 @@ FONT = "resources/PixelSplitter-Bold.ttf"
 
 # Custom seed for RNG
 SEED = ""
+IMG_SIZE = (1000,1000)
 
 def main(argv):
     tweet = False
@@ -36,7 +36,7 @@ def main(argv):
     if SEED != "":
         seed(SEED)
 
-    generator = PolyFriendGenerator((1000,1000), 5, rand_text(NAMES), real_path(FONT), file)
+    generator = PolyFriendGenerator(IMG_SIZE, 5, rand_text(NAMES), real_path(FONT), file)
     generator.generate_image()
     generator.save_image()
 
@@ -102,7 +102,7 @@ class PolyFriendGenerator:
         self.b_length = randint(int(-y/18),int(y/10))
         self.leg_length = randint(int(y/14),int(y/10))
         self.arm_length = self.leg_length
-        self.feet_length = randint(15,40)
+        self.feet_length = randint(15,50)
 
         self.arm_angles = (randint(-60, 75), randint(-60, 75))
         self.eye_angles = [(-90, 90), (90, -90)]
@@ -149,7 +149,8 @@ class PolyFriendGenerator:
             lambda x,y: [[],[]],
             lambda x,y: [[(x-h/10,y-h/15),(x+h/10,y+h/20)],[(x-h/10,y+h/20),(x+h/10,y-h/15)]],
             lambda x,y: [[(x-h/10,y+h/15),(x+h/10,y-h/20)],[(x-h/10,y-h/20),(x+h/10,y+h/15)]],
-            lambda x,y: [[(x-h/10,y),(x+h/10,y)],[(x-h/10,y),(x+h/10,y)]]
+            lambda x,y: [[(x-h/10,y),(x+h/10,y)],[(x-h/10,y),(x+h/10,y)]],
+            lambda x,y: [[(x-h/10,y),(x,y-h/10), (x,y-h/10),(x+h/10,y)], [(x-h/10,y),(x,y-h/10), (x,y-h/10),(x+h/10,y)]]
         ]
         self.h_points = choice(self.head_shapes)(self.c[0], self.c[1]-h)
         self.b_points = choice(self.body_shapes)(self.c[0], self.c[1], 100)
@@ -244,7 +245,7 @@ class PolyFriendGenerator:
         return (x+p[0] if right else -x+p[0], y)
 
     def rand_pastel(self):
-        return (randint(0,255),75,255)
+        return (randint(0,255),randint(60,85),255)
 
 if __name__ == "__main__":
     main(sys.argv)
